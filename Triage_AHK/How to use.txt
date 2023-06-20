@@ -1,0 +1,35 @@
+------ Quick note ------
+
+^f1 == ctrl + F1 --> set_bp_archsim
+^f2 == ctrl + F2 --> set_bp_zsim
+^f5 == ctrl + F3 --> xmon_teest_seed
+^f6 == ctrl + F4 --> xmon_teest_seed_shmoo
+^f7 == ctrl + F9 --> gem_attachment
+^f10 == ctrl + F10 --> import_cmt_library
+^f11 == ctrl + F11 --> cmt_dump_clip
+
+**DO maintain your own AHK as per projects you dealt with**
+----- Be creative with your own efficiency game ----
+
+
+------ How to edit your own AHK -------
+
+**You may edit accordingly to your OWN PREFERENCE**
+[1] Right-click and open with "Notepad"
+[2] Change ^f1 to ^f2 if you wish to put it as CTRL+F2 instead of CTRL+F1
+
+
+------- How to add your own AHK --------
+
+**You may add in your own *.AHK to your OWN PREFERENCE**
+[1] Copy and paste existing *.ahk
+[2] Make changes to your own setting (eg: new projects command line and etc)
+[3] Remember to update and maintain the "Execute_all_ahk.bat"
+[4] Execute the batch 
+
+-----------------------------------------------------------------
+---Do read up the documentation of AHK for other possible keys---
+---       https://www.autohotkey.com/docs/v1/KeyList.htm      ---
+-----------------------------------------------------------------
+
+
