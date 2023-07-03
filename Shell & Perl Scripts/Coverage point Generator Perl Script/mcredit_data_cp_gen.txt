@@ -1,0 +1,146 @@
+#!/usr/intel/bin/perl
+$VARIATION = "mcredit_data";
+
+open(NEWFILE, ">iosf_stress_mst_ttif_cp_$VARIATION") || die "cannot open iosf_stress_mst_ttif_cp_$VARIATION";
+close(NEWFILE);
+
+
+for ( $rtype_num1 = 0; $rtype_num1 <= 2; $rtype_num1++) {  
+    for ( $data_rtype_num1 = 0; $data_rtype_num1 <= 2; $data_rtype_num1++) {  
+        for ($chid_num1 = 0; $chid_num1 <= 1; $chid_num1++) { 
+            for ($data_chid_num1 = 0; $data_chid_num1 <= 1; $data_chid_num1++) {    
+                for ($credit_data_num1 = 0; $credit_data_num1 <= 1; $credit_data_num1++) { 
+                     for ($credit_cmd_num1 = 0; $credit_cmd_num1 <= 1; $credit_cmd_num1++) {  
+                        for ($ism_fabric_num1 = 0; $ism_fabric_num1 <= 1; $ism_fabric_num1++) {
+
+                            for ($rtype_num2 = 0; $rtype_num2 <= 2; $rtype_num2++) { #2nd clock
+                                for ($data_rtype_num2 = 0; $data_rtype_num2 <= 2; $data_rtype_num2++) { 
+                                    for ($chid_num2 = 0; $chid_num2 <= 1; $chid_num2++) {  
+                                        for ($data_chid_num2 = 0; $data_chid_num2 <= 1; $data_chid_num2++) {  
+                                            for ($credit_data_num2 = 0; $credit_data_num2 <= 1; $credit_data_num2++) {  
+                                                for ($credit_cmd_num2 = 0; $credit_cmd_num2 <= 1; $credit_cmd_num2++) {
+                                                    for ($ism_fabric_num2 = 0; $ism_fabric_num2 <= 1; $ism_fabric_num2++) {
+
+                                                        if ($credit_cmd_num1 == 0 && $credit_data_num1 == 0) {}
+                                                        elsif ($credit_cmd_num1 == 0 && ($rtype_num1 != 0 || $chid_num1 !=0)) {}
+                                                        elsif ($credit_data_num1  == 0 && ($data_rtype_num1 != 0 || $data_chid_num1 !=0)) {}
+                                                        #P & NP_RX_STREAM_EN[1]==0
+                                                        #pCmdTtifCrd inside {[1:16]}; <-ism_fabroc_array=5
+                                                        elsif (($ism_fabric_num1 == 0 && $ism_fabric_num2 == 0) && 
+                                                        (($chid_num1 == 1 && ($rtype_num1 == 0 || $rtype_num1 == 1)) || 
+                                                        ($chid_num2 == 1 &&( $rtype_num2 == 0 || $rtype_num2 == 1)) || 
+                                                        ($data_chid_num1 == 1 &&( $data_rtype_num1 == 0 || $data_rtype_num1 == 1)) || 
+                                                        ($data_chid_num2 == 1 &&( $data_rtype_num2 == 0 || $data_rtype_num2 == 1)))) {}
+                                                        elsif ($credit_cmd_num2 == 0 && $credit_data_num2 == 0) {} #2nd clock
+                                                        elsif ($credit_cmd_num2 == 0 && ($rtype_num2 != 0 || $chid_num2 !=0)) {}
+                                                        elsif ($credit_data_num2  == 0 && ($data_rtype_num2 != 0 || $data_chid_num2 !=0)) {}
+                                                        else{
+                                                            if($credit_data_num1 == 0 || $credit_cmd_num1 == 0|| $credit_data_num2 == 0 || $credit_cmd_num2 == 0) {
+                                                                if ($credit_data_num1==0 && $credit_cmd_num1==1 && $credit_data_num2==0 && $credit_cmd_num2==1) {
+                                                                    &printOnNewFile ("cp_ism_fab_mst_intf_b2b_mcredit_put_data_0101", $rtype_num1, "nil", $chid_num1, "nil", $credit_data_num1, $credit_cmd_num1, $ism_fabric_num1, $rtype_num2, "nil" , $chid_num2, "nil", $credit_data_num2, $credit_cmd_num2, $ism_fabric_num2);
+                                                                }
+                                                                elsif ($credit_data_num1==0 && $credit_cmd_num1==1 && $credit_data_num2==1 && $credit_cmd_num2==0) {
+                                                                    &printOnNewFile ("cp_ism_fab_mst_intf_b2b_mcredit_put_data_0110", $rtype_num1, "nil", $chid_num1, "nil", $credit_data_num1, $credit_cmd_num1, $ism_fabric_num1, "nil", $data_rtype_num2, "nil", $data_chid_num2, $credit_data_num2, $credit_cmd_num2, $ism_fabric_num2);                                                                    
+                                                                }
+                                                               elsif ($credit_data_num1==0 && $credit_cmd_num1==1 && $credit_data_num2==1 && $credit_cmd_num2==1) {
+                                                                    &printOnNewFile ("cp_ism_fab_mst_intf_b2b_mcredit_put_data_0111", $rtype_num1, "nil", $chid_num1, "nil", $credit_data_num1, $credit_cmd_num1, $ism_fabric_num1, $rtype_num2, $data_rtype_num2, $chid_num2, $data_chid_num2, $credit_data_num2, $credit_cmd_num2, $ism_fabric_num2);
+                                                                }
+                                                                elsif ($credit_data_num1==1 && $credit_cmd_num1==0 && $credit_data_num2==0 && $credit_cmd_num2==1) {
+                                                                    &printOnNewFile("cp_ism_fab_mst_intf_b2b_mcredit_put_data_1001", "nil", $data_rtype_num1, "nil", $data_chid_num1, $credit_data_num1, $credit_cmd_num1, $ism_fabric_num1, $rtype_num2, "nil", $chid_num2, "nil", $credit_data_num2, $credit_cmd_num2, $ism_fabric_num2);
+                                                                }
+                                                                elsif ($credit_data_num1==1 && $credit_cmd_num1==0 && $credit_data_num2==1 && $credit_cmd_num2==0) {
+                                                                    &printOnNewFile("cp_ism_fab_mst_intf_b2b_mcredit_put_data_1010", "nil", $data_rtype_num1, "nil", $data_chid_num1, $credit_data_num1, $credit_cmd_num1, $ism_fabric_num1, "nil", $data_rtype_num2, "nil", $data_chid_num2 ,$credit_data_num2, $credit_cmd_num2, $ism_fabric_num2);
+                                                                }
+                                                                elsif ($credit_data_num1==1 && $credit_cmd_num1==0 && $credit_data_num2==1 && $credit_cmd_num2==1) {
+                                                                    &printOnNewFile("cp_ism_fab_mst_intf_b2b_mcredit_put_data_1011", "nil", $data_rtype_num1, "nil", $data_chid_num1, $credit_data_num1, $credit_cmd_num1, $ism_fabric_num1, $rtype_num2, $data_rtype_num2, $chid_num2, $data_chid_num2, $credit_data_num2, $credit_cmd_num2, $ism_fabric_num2);
+                                                                }     
+                                                                elsif ($credit_data_num1==1 && $credit_cmd_num1==1 && $credit_data_num2==0 && $credit_cmd_num2==1) {
+                                                                    &printOnNewFile("cp_ism_fab_mst_intf_b2b_mcredit_put_data_1101", $rtype_num1, $data_rtype_num1, $chid_num1, $data_chid_num1, $credit_data_num1, $credit_cmd_num1, $ism_fabric_num1, $rtype_num2, "nil", $chid_num2, "nil", $credit_data_num2, $credit_cmd_num2, $ism_fabric_num2);
+                                                                }
+                                                                elsif ($credit_data_num1==1 && $credit_cmd_num1==1 && $credit_data_num2==1 && $credit_cmd_num2==0) {
+                                                                    &printOnNewFile("cp_ism_fab_mst_intf_b2b_mcredit_put_data_1110", $rtype_num1, $data_rtype_num1, $chid_num1, $data_chid_num1, $credit_data_num1, $credit_cmd_num1, $ism_fabric_num1, "nil", $data_rtype_num2, "nil", $data_chid_num2, $credit_data_num2, $credit_cmd_num2, $ism_fabric_num2);
+                                                                }
+                                                            }
+                                                            else {
+                                                                    &printOnNewFile("cp_ism_fab_mst_intf_b2b_mcredit_put_data", $rtype_num1, $data_rtype_num1, $chid_num1, $data_chid_num1, $credit_data_num1, $credit_cmd_num1, $ism_fabric_num1, $rtype_num2, $data_rtype_num2, $chid_num2, $data_chid_num2, $credit_data_num2, $credit_cmd_num2, $ism_fabric_num2); 
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+sub printOnNewFile {
+    my @item = @_;
+    my $rtype1, $rtype2, $data_rtype1, $data_rtype2;
+    my $r1, $dr1, $r2, $dr2, $ch1, $dch1, $chd2, $dch2, $cd1, $cd2, $cc1, $cc2, $ism1, $ism2;
+    my $chid1, $chid2, $data_chid1, $data_chid2;
+    my $credit_data1, $credit_data2, $credit_cmd1, $credit_cmd2;
+    my $ism_fab1, $ism_fab2;
+    
+#For all the rtypes
+    if($item[1] == 0) {$rtype1 = "CTL::POSTED"; $r1 = "rp"; } elsif($item[1] == 1) {$rtype1 = "CTL::NONPOSTED"; $r1 = "rnp"; } else{ $rtype1 = "CTL::COMPLETION"; $r1 = "rcpl";}
+    if($item[8] == 0) {$rtype2 = "CTL::POSTED"; $r2 = "rp"; } elsif($item[8] == 1) {$rtype2 = "CTL::NONPOSTED"; $r2 = "rnp"; } else{ $rtype2 = "CTL::COMPLETION"; $r2 = "rcpl";}
+    if($item[2] == 0) {$data_rtype1 = "CTL::POSTED"; $dr1 = "drp"; } elsif($item[2] == 1) {$data_rtype1 = "CTL::NONPOSTED"; $dr1 = "drnp"; } else{ $data_rtype1 = "CTL::COMPLETION"; $dr1 = "drcpl";}
+    if($item[9] == 0) {$data_rtype2 = "CTL::POSTED"; $dr2 = "drp"; } elsif($item[9] == 1) {$data_rtype2 = "CTL::NONPOSTED"; $dr2 = "drnp"; } else{ $data_rtype2 = "CTL::COMPLETION"; $dr2 = "drcpl";}
+
+#For all the chids
+    if($item[3] == 0) {$chid1 = 0; $ch1 = "vc".$chid1; } else {$chid1 = 1; $ch1 = "vc".$chid1;} 
+    if($item[10] == 0) {$chid2 = 0; $ch2 = "vc".$chid2; } else {$chid2 = 1; $ch2 = "vc".$chid2;}
+    if($item[4] == 0) {$data_chid1 = 0; $dch1 = "vc".$data_chid1; } else {$data_chid1 = 1; $dch1 = "vc".$data_chid1;}
+    if($item[11] == 0) {$data_chid2 = 0; $dch2 = "vc".$data_chid2; } else {$data_chid2 = 1; $dch2 = "vc".$data_chid2;}
+
+#For all the credits
+    if($item[5] == 0) {$credit_data1 = 0; $cd1 = "cd".$credit_data1; } else {$credit_data1 = 1; $cd1 = "cd".$credit_data1;}
+    if($item[12] == 0) {$credit_data2 = 0; $cd2 = "cd".$credit_data2; } else {$credit_data2 = 1; $cd2 = "cd".$credit_data2;}
+    if($item[6] == 0) {$credit_cmd1 = 0; $cc1 = "cc".$credit_cmd1;} else {$credit_cmd1 = 1; $cc1 = "cc".$credit_cmd1;}
+    if($item[13] == 0) {$credit_cmd2 =0; $cc2 = "cc".$credit_cmd2;} else {$credit_cmd2 = 1; $cc2 = "cc".$credit_cmd2;}
+
+#For ISM FABRIC
+    if($item[7] == 0) {$ism_fab1 = 3; $ism1 = "fab".$ism_fab1;} else {$ism_fab1 = 5; $ism1 = "fab".$ism_fab1;}
+    if($item[14] == 0) {$ism_fab2 = 3; $ism2 = "fab".$ism_fab2;} else {$ism_fab2 = 5; $ism2 = "fab".$ism_fab2;}
+
+    open(NEWFILE, ">>iosf_stress_mst_ttif_cp_$VARIATION") || die "cannot open iosf_stress_mst_ttif_cp_$VARIATION";
+
+#Printing necessary cover property
+
+    if($item[0] eq "cp_ism_fab_mst_intf_b2b_mcredit_put_data"){
+        printf NEWFILE "cp_stress_mst_ttif_b2b_mcredit_put_data_$r1\_$dr1\_$ch1\_$dch1\_$cd1\_$cc1\_$ism1\_2nd_$r2\_$dr2\_$ch2\_$dch2\_$cd2\_$cc2\_$ism2 : cover property (seq_agent_mst_intf_b2b_mcredit_put_data($rtype1, $data_rtype1, $chid1, $data_chid1, $credit_data1, $credit_cmd1, $ism_fab1, $rtype2, $data_rtype2, $chid2, $data_chid2, $credit_data2, $credit_cmd2, $ism_fab2));\n";
+    }
+    if($item[0] eq "cp_ism_fab_mst_intf_b2b_mcredit_put_data_0101"){
+        printf NEWFILE "cp_stress_mst_ttif_b2b_mcredit_put_data_0101_$r1\_$ch1\_$cd1\_$cc1\_$ism1\_2nd_$r2\_$ch2\_$cd2\_$cc2\_$ism2 : cover property (seq_agent_mst_intf_b2b_mcredit_put_data_0101($rtype1, $chid1, $credit_data1, $credit_cmd1, $ism_fab1, $rtype2, $chid2, $credit_data2, $credit_cmd2, $ism_fab2));\n";
+    }
+    if($item[0] eq "cp_ism_fab_mst_intf_b2b_mcredit_put_data_0110"){
+        printf NEWFILE "cp_stress_mst_ttif_b2b_mcredit_put_data_0110_$r1\_$ch1\_$cd1\_$cc1\_$ism1\_2nd_$dr2\_$dch2\_$cd2\_$cc2\_$ism2 : cover property (seq_agent_mst_intf_b2b_mcredit_put_data_0110($rtype1, $chid1, $credit_data1, $credit_cmd1, $ism_fab1, $data_rtype2, $data_chid2, $credit_data2, $credit_cmd2, $ism_fab2));\n";
+    }
+    if($item[0] eq "cp_ism_fab_mst_intf_b2b_mcredit_put_data_0111"){
+        printf NEWFILE "cp_stress_mst_ttif_b2b_mcredit_put_data_0111_$r1\_$ch1\_$cd1\_$cc1\_$ism1\_2nd_$r2\_$dr2\_$ch2\_$dch2\_$cd2\_$cc2\_$ism2 : cover property (seq_agent_mst_intf_b2b_mcredit_put_data_0111($rtype1, $chid1, $credit_data1, $credit_cmd1, $ism_fab1, $rtype2, $data_rtype2, $chid2, $data_chid2, $credit_data2, $credit_cmd2, $ism_fab2));\n";
+    }
+    if($item[0] eq "cp_ism_fab_mst_intf_b2b_mcredit_put_data_1001"){
+        printf NEWFILE "cp_stress_mst_ttif_b2b_mcredit_put_data_1001_$dr1\_$dch1\_$cd1\_$cc1\_$ism1\_2nd_$r2\_$ch2\_$cd2\_$cc2\_$ism2 : cover property (seq_agent_mst_intf_b2b_mcredit_put_data_1001($data_rtype1, $data_chid1, $credit_data1, $credit_cmd1, $ism_fab1, $rtype2, $chid2, $credit_data2, $credit_cmd2, $ism_fab2));\n";
+    }
+    if($item[0] eq "cp_ism_fab_mst_intf_b2b_mcredit_put_data_1010"){
+        printf NEWFILE "cp_stress_mst_ttif_b2b_mcredit_put_data_1010_$dr1\_$dch1\_$cd1\_$cc1\_$ism1\_2nd_$dr2\_$dch2\_$cd2\_$cc2\_$ism2 : cover property (seq_agent_mst_intf_b2b_mcredit_put_data_1010($data_rtype1, $data_chid1, $credit_data1, $credit_cmd1, $ism_fab1, $data_rtype2, $data_chid2, $credit_data2, $credit_cmd2, $ism_fab2));\n";
+    }
+    if($item[0] eq "cp_ism_fab_mst_intf_b2b_mcredit_put_data_1011"){
+        printf NEWFILE "cp_stress_mst_ttif_b2b_mcredit_put_data_1011_$dr1\_$dch1\_$cd1\_$cc1\_$ism1\_2nd_$r2\_$dr2\_$ch2\_$dch2\_$cd2\_$cc2\_$ism2 : cover property (seq_agent_mst_intf_b2b_mcredit_put_data_1011($data_rtype1, $data_chid1, $credit_data1, $credit_cmd1, $ism_fab1, $rtype2, $data_rtype2, $chid2, $data_chid2, $credit_data2, $credit_cmd2, $ism_fab2));\n";
+    }
+    if($item[0] eq "cp_ism_fab_mst_intf_b2b_mcredit_put_data_1101"){
+        printf NEWFILE "cp_stress_mst_ttif_b2b_mcredit_put_data_1101_$r1\_$dr1\_$ch1\_$dch1\_$cd1\_$cc1\_$ism1\_2nd_$r2\_$ch2\_$cd2\_$cc2\_$ism2 : cover property (seq_agent_mst_intf_b2b_mcredit_put_data_1101($rtype1, $data_rtype1, $chid1, $data_chid1, $credit_data1, $credit_cmd1, $ism_fab1, $rtype2, $chid2, $credit_data2, $credit_cmd2, $ism_fab2));\n";
+    }
+    if($item[0] eq "cp_ism_fab_mst_intf_b2b_mcredit_put_data_1110"){
+        printf NEWFILE "cp_stress_mst_ttif_b2b_mcredit_put_data_1110_$r1\_$dr1\_$ch1\_$dch1\_$cd1\_$cc1\_$ism1\_2nd_$dr2\_$dch2\_$cd2\_$cc2\_$ism2 : cover property (seq_agent_mst_intf_b2b_mcredit_put_data_1110($rtype1, $data_rtype1, $chid1, $data_chid1, $credit_data1, $credit_cmd1, $ism_fab1, $data_rtype2, $data_chid2, $credit_data2, $credit_cmd2, $ism_fab2));\n";
+    } 
+       
+    close(NEWFILE);
+} 
+

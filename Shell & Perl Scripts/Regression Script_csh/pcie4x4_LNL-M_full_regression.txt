@@ -1,0 +1,84 @@
+#!/usr/bin/tcsh
+setenv DD ww`date '+%V'`_`date '+%A'`_`date '+%d'`
+#pcie4x4/pcie1x8/etc
+setenv DUT $1
+#LNL-M/ADL-UH/etc
+setenv CUST $2
+#PIPE/fullstack
+setenv MODE $3 
+#ID name - e.i brendanw
+setenv ID $4
+#Set the directory path that you want to clone the model in
+setenv MODEL_PATH "/nfs/site/stod/stod3127/w.spulaga.102/LNL_REG"
+setenv MODEL_NAME "${DD}_${DUT}_${CUST}_${MODE}"
+setenv MODEL_ROOT "$MODEL_PATH/$MODEL_NAME"
+setenv WORKAREA "$MODEL_ROOT"
+setenv PXP_PROJ "${DUT}_${CUST}"
+
+mkdir $MODEL_PATH/cronjob
+
+echo "DUT= $DUT, CUST= $CUST, MODE= $MODE" > $MODEL_PATH/cronjob/source_env.log
+#wash -n ciguser soc intelall siphdk siphssio hdk7nm phdk73rtl adp n7 n7na n7fe mtl n6 n6fe lnls
+#/p/hdk/pu_tu/prd/liteinfra/1.3/commonFlow/bin/cth_psetup -p ipfe -cfg cig -read_only -force >> $MODEL_PATH/cronjob/source_env.log
+#
+#cd $MODEL_PATH
+#
+#echo "cloning new mode"
+#
+#git clone /nfs/site/disks/gitgk_0000/git_repos/pcie/ip-pcie-douglas2-cth $MODEL_NAME >> $MODEL_PATH/cronjob/source_env.log
+cd $MODEL_ROOT
+
+mkdir $MODEL_ROOT/cronjob
+#Source project specific env variables & repo aliases
+source $WORKAREA/scripts/setup $DUT $CUST $MODE > $MODEL_ROOT/cronjob/source_env.log
+source $WORKAREA/aliases
+
+if ("$status" != 0) then
+        echo "ENV SETUP status FAIL<br>/n>br>" >> $MODEL_ROOT/cronjob/REGRESS_REPORT
+        echo "<span style='background:yellow;mso-highlight:yellow'> Please check if your xterm or VNC is SLES12 instead of SLES11 or Check $WORKAREA/cronjob/source_env.log </span> <br>\n<br> Thanks & Regards" >> $MODEL_ROOT/cronjob/REGRESS_REPORT
+	/usr/intel/bin/metasend -b -F $4 -t $4 -s "$MODEL_NAME MODEL ENV - FAIL" -m text/html -f $MODEL_ROOT/cronjob/REGRESS_REPORT
+exit 1
+else
+	echo "ENV SETUP status PASS<br>\n" >> $MODEL_ROOT/cronjob/REGRESS_REPORT
+endif
+
+#Build phase - Check $WOKAREA/Summary
+perl $WORKAREA/scripts/model_build/perl_build_cth.pl -proj $PXP_PROJ -BASIC -NO_VISA 
+
+if ("$status" != 0) then
+	echo "MODEL build status FAIL<br>\n<br>" >> $MODEL_ROOT/REGRESS_REPORT
+        echo "<span style='background:yellow;mso-highlight:yellow'> Please check the failure under $WORKAREA/logs/build.log </span> <br>\n<br> Thanks & Regards" >> $MODEL_ROOT/cronjob/REGRESS_REPORT
+	/usr/intel/bin/metasend -b -F $4 -t $4 -s "$MODEL_NAME MODEL BUILD - FAIL" -m text/html -f $MODEL_ROOT/cronjob/REGRESS_REPORT
+exit 1
+else
+	echo "MODEL build status PASS<br>" >> $MODEL_ROOT/REGRESS_REPORT
+endif
+
+#Compilation phase - Check compilation.log for failure
+make vcssim DUT=${DUT}_${CUST}_${MODE} TARGET=vcssim.model.pcie_${MODE} DEFINE= >> $MODEL_ROOT/cronjob/compilation.log
+
+if ("$status" != 0) then
+	echo "MODEL compile status FAIL<br>\n<br>" >> $MODEL_ROOT/REGRESS_REPORT
+	echo "<span style='background:yellow;mso-highlight:yellow'> Please check the failure under $WORKAREA/cronjob/compilation.log </span> <br>\n<br> Thanks & Regards" >> $MODEL_ROOT/REGRESS_REPORT
+	/usr/intel/bin/metasend -b -F $4 -t $4 -s "$MODEL_NAME MODEL BUILD - FAIL" -m text/html -f $MODEL_ROOT/REGRESS_REPORT
+
+exit 1
+else
+	echo "MODEL compile status PASS<br>\n<br>" >> $MODEL_ROOT/REGRESS_REPORT	
+endif
+
+#Test run phase - full link VT regression run on CTH (static test specific for pcie4x4 LNL-M)
+cd $WORKAREA
+source /nfs/sc/disks/sc_hssio_00092/brendanw/douglas2/link_rcgen_testlist/run_pipe_lnl-m_pci4x4.csh >> $MODEL_ROOT/cronjob/run_exec.log
+
+if ("$status" != 0) then
+	echo "TEST RUN SOURCE status FAIL<br>\n<br>" >> $MODEL_ROOT/REGRESS_REPORT
+	/usr/intel/bin/metasend -b -F $4 -t $4 -s "$MODEL_NAME MODEL RCGEN - FAIL" -m text/html -f $MODEL_ROOT/REGRESS_REPORT
+else
+	echo "TEST RUN SOURCE status PASS<br>\n<br>" >> $MODEL_ROOT/REGRESS_REPORT
+endif
+
+#Email alert to inform cronjob regression is completed
+echo "<br>\n <span style='background:yellow;mso-highlight:yellow'> Full Regression Test Script Execution Completed! --> PLEASE REFER TO $WORKAREA/cronjob/* </span> <br>\n<br> Thanks & Regards" >> $MODEL_ROOT/REGRESS_REPORT
+/usr/intel/bin/metasend -b -F $4 -t $4 -s "$MODEL_NAME MODEL REGRESSION EXECUTION- COMPLETED" -m text/html -f $MODEL_ROOT/REGRESS_REPORT
+

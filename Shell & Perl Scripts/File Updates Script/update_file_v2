@@ -1,0 +1,20 @@
+#!/usr/bin/tcsh
+
+setenv path_set /nfs/sc/disks/sc_hssio_00092/brendanw/CTL/fix_file
+setenv path_list /nfs/sc/disks/sc_hssio_00092/brendanw/update.list
+
+set counter = 1
+set no_feature="`wc -w < $path_list`"
+
+cd $MODEL_ROOT
+
+while ($counter <= $no_feature )
+
+#scp pglc1218.png.intel.com:$path_set/`cat  $path_list | head -$counter | tail -1` $MODEL_ROOT/`cat  $path_list | head -$counter | tail -1` >> $MODEL_ROOT/fix_copy.log
+        cp -rfv $path_set/`cat  $path_list | head -$counter | tail -1` $MODEL_ROOT/`cat  $path_list | head -$counter | tail -1` >> $MODEL_ROOT/fix_copy.log
+	@ counter++
+
+end
+echo "FIX COPY COMPLETE"
+
+
