@@ -1,0 +1,44 @@
+#!/usr/bin/tcsh
+
+#setenv path_set /nfs/sc/disks/sc_hssio_00092/brendanw/douglas2/mtl_p/ww39_Wednesday_22_1x8_mtl_p
+#setenv path_set2 /nfs/png/disks/png_hssio_00137/douglas2ww32e_seqnumrollover
+
+#setenv path_set1 /nfs/png/stod/stod7003/w.shawweic.101/pcie_2ml_18052020/verif/tb/coverage/px_cspec_cov/PX_RX_LL/
+
+#cd $MODEL_ROOT/verif/lib/ip_specific/sippcie2_moat
+####Exmaple of SCP######
+#scp pglc1218.png.intel.com:/nfs/png/stod/stod0050/w.cchaong.100/CTL/model_douglas/pcie/turnin/ip-pcie-douglas2_turnin_03122019/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/basic/sippx_rx_ll_basic_dllp_bad_crc_fseq.svh $MODEL_ROOT/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/basic/sippx_rx_ll_basic_dllp_bad_crc_fseq.svh
+#echo no1
+
+#rm -rfv latest
+#ln -sf /p/sip/central/libraries/MOAT/pcie2/v210111 latest
+
+#cp -rfv /nfs/sc/disks/sc_hssio_00092/brendanw/douglas2/sippx_basic_xact_fseq.svh $MODEL_ROOT/verif/tb/seqlib/feature_all_supported_transaction_seq/reusable/fseq/sippx_basic_xact_fseq.svh
+
+#cp -rfv $path_set/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/dlcmsm/sippx_rx_ll_dlcmsm_dl_feature_unsupported_remote_config_phase_parallel_fseq.svh $MODEL_ROOT/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/dlcmsm/sippx_rx_ll_dlcmsm_dl_feature_unsupported_remote_config_phase_parallel_fseq.svh
+
+#scp pglc1218.png.intel.com:$path_set/verif/tb/seqlib/feature_common_seq/reusable/fseq/sippx_r_config_cseq.svh $MODEL_ROOT/verif/tb/seqlib/feature_common_seq/reusable/fseq/sippx_r_config_cseq.svh
+
+#scp pglc1218.png.intel.com:$path_set/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/b2b_packets/sippx_rx_ll_datastream_to_os_pkts_fseq.svh $MODEL_ROOT/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/b2b_packets/sippx_rx_ll_datastream_to_os_pkts_fseq.svh
+
+#scp pglc1218.png.intel.com:$path_set/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/b2b_packets/sippx_rx_ll_datastream_b2b_pkts_fseq.svh $MODEL_ROOT/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/b2b_packets/sippx_rx_ll_datastream_b2b_pkts_fseq.svh
+
+#scp pglc1218.png.intel.com:$path_set/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/b2b_packets/sippx_rx_ll_datastream_to_os_pkts_fseq.svh $MODEL_ROOT/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/b2b_packets/sippx_rx_ll_datastream_to_os_pkts_fseq.svh
+
+#scp pglc1218.png.intel.com:$path_set/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/b2b_packets/sippx_rx_ll_os_to_datastream_recovery_fseq.svh $MODEL_ROOT/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/b2b_packets/sippx_rx_ll_os_to_datastream_recovery_fseq.svh
+
+#scp pglc1218.png.intel.com:$path_set2/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/seqnumrollover/sippx_rx_ll_seqnumrollover_fseq.svh $MODEL_ROOT/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/seqnumrollover/sippx_rx_ll_seqnumrollover_fseq.svh
+
+#scp pglc1218.png.intel.com:$path_set2/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/seqnumrollover/sippx_rx_ll_upstream_goodTLP_seq_rollover_boundary_case_badCRCcases_fseq.svh $MODEL_ROOT/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/seqnumrollover/sippx_rx_ll_upstream_goodTLP_seq_rollover_boundary_case_badCRCcases_fseq.svh
+
+#scp pglc1218.png.intel.com:$path_set2/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/seqnumrollover/sippx_rx_ll_seqnumrollover_base_fseq.svh $MODEL_ROOT/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/seqnumrollover/sippx_rx_ll_seqnumrollover_base_fseq.svh
+
+#scp pglc1218.png.intel.com:$path_set2/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/seqnumrollover/sippx_rx_ll_seqnumrollover_base_fseq.svh $MODEL_ROOT/verif/tb/seqlib/feature_rx_ll_seq/non_reusable/fseq/seqnumrollover/sippx_rx_ll_seqnumrollover_base_fseq.svh
+
+#scp pglc1218.png.intel.com:$path_set/fseq/CONFIGURATION/sippx_MLT_g3_config_idle_2_2_fseq.svh $MODEL_ROOT/verif/tb/seqlib/feature_ltssm/non_reusable/fseq/CONFIGURATION/sippx_MLT_g3_config_idle_2_2_fseq.svh
+
+#scp pglc1218.png.intel.com:$path_set/fseq/CONFIGURATION/sippx_MLT_g3_config_idle_3_1_fseq.svh $MODEL_ROOT/verif/tb/seqlib/feature_ltssm/non_reusable/fseq/CONFIGURATION/sippx_MLT_g3_config_idle_3_1_fseq.svh
+
+
+
+echo "DONE COPYING FIXES"

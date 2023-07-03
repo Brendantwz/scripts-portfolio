@@ -1,0 +1,21 @@
+#!/usr/bin/tcsh
+setenv MODEL_ROOT /nfs/sc/disks/sc_hssio_00092/brendanw/CTL/ww47b_iosf_prim
+
+source /p/hdk/rtl/hdk.rc -cfg sip -reentrant
+echo "Source complete"
+cd $MODEL_ROOT/regression/focus_test10_20seeds/pdmi
+ln -sf * REGRESS_OUTPUT
+
+/p/hdk/rtl/proj_tools/PCIE_TFM/siphdk/latest/flow/psvsort_pcie/psvsort_pcie
+echo "Sort complete"
+sleep 5s
+
+cd $MODEL_ROOT/regression/focus_test00_20seeds/
+urg -dir pdmi/rcgen_pipe_ctl_iosfprimary.list/PASS/*/*.simv.vdb -show tests -dbname mergepri.simv.vdb
+echo "Merge complete"
+
+echo "VPD generation starting"
+cd $MODEL_ROOT/regression/focus_test10/pdmi/rcgen_pipe_ctl_iosfprimary.list/PASS/px_iosf_stress_dev_cpl_test.26/
+
+/p/hdk/rtl/proj_tools/PCIE_TFM/siphdk/latest/flow/ValAssistance/ValAssistance.sh -simregress -dofile /nfs/sc/disks/sc_hssio_00092/brendanw/douglas2/mtp_s/dump.do -dir /nfs/sc/disks/sc_hssio_00092/brendanw/CTL/ww47b_iosf_prim/ -gui dve
+

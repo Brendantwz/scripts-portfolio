@@ -1,0 +1,43 @@
+#!/usr/bin/tcsh
+
+###########################
+##### SCRIPT PURPOSE ######
+###########################
+
+## Specifically to bucketized all existing feature within /regression/tests/full/pipe/*
+## Only be useful if you have > 1 features
+## Else just ln -sf * REGRESS_OUTPUT then exec /nfs/site/stod/stod3010/w.ykannan.101/scripts/PSVSORTER/psvsort_pcie
+
+# Make sure to setenv MODEL_ROOT <MODEL_ROOT PATH>
+cd $MODEL_ROOT
+
+ls -d $MODEL_ROOT/regression/tests/full/pipe/* > $MODEL_ROOT/test_features.list
+
+set counter = 1
+set no_feature = "`wc -w < $MODEL_ROOT/test_features.list`"
+
+while ($counter <= $no_feature )
+	cd "`cat $MODEL_ROOT/test_features.list | head -$counter | tail -1`"
+	cd *
+	set no_files = "`ls | wc -l`"
+	if ("$no_files" == 1) then
+		ln -sf * REGRESS_OUTPUT
+		## /nfs/png/stod/stod0043vs/w.ykannan.100/scripts/PSVSORTER/psvsort_pcie ## uncomment for PNG ##
+                ## /nfs/site/stod/stod3010/w.ykannan.101/scripts/PSVSORTER/psvsort_pcie ## uncomment for SC ##
+                /p/hdk/rtl/proj_tools/PCIE_TFM/siphdk/latest/flow/psvsort_pcie/psvsort_pcie 
+		echo "COMPLETED BUCKETIZED for `cat $MODEL_ROOT/test_features.list | head -$counter | tail -1`<br>" >> $MODEL_ROOT/bucketized_log
+	else
+		echo "WARNING: `cat $MODEL_ROOT/test_features.list | head -$counter | tail -1` has more than 1 file. Please check if it has already being bucketized!<br>" >> $MODEL_ROOT/bucketized_log
+	endif
+	@ counter++
+end
+echo "BUCKETIZED COMPLETE - PRESS ENTER"
+
+
+
+#######################
+##### EMAIL ALERT #####
+#######################
+
+#/usr/intel/bin/metasend -b -F brendanw -t "brendanw cchaong ppoobala shawweic" -s "BUCKETIZED REPORT - $MODEL_ROOT" -m text/html -f $MODEL_ROOT/bucketized_log
+	

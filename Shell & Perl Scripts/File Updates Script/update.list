@@ -1,0 +1,5 @@
+verif/tb/seqlib/feature_common_seq/reusable/fseq/sippx_ctl_pcie_iosf_item_seq.svh
+verif/tb/seqlib/feature_common_seq/reusable/fseq/sippx_ctl_prim_cseq.svh
+verif/tb/seqlib/feature_common_seq/reusable/fseq/sippx_ctl_prim_mst_cseq.svh
+verif/tb/seqlib/feature_common_seq/reusable/fseq/sippx_ctl_xfer_cseq.svh
+verif/tb/seqlib/sippx_enum_declaration/sippx_iosfprimary_item_seq.svh
